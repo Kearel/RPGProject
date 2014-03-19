@@ -16,11 +16,10 @@ public class Unit implements BattleUnit {
 	public Vector2f position;
 	private Vector2i gridPosition;
 	private String name;
-	public int hp;
-	public int hpCell, hpBar;
+	private int hpStat, strengthStat, dexterityStat, intelligenceStat, wisdomStat;
+	private int hp, speed;
 	public ArrayList<Action> actions;
 	private int depth;
-	private int speed;
 	private int movement;
 	public boolean acting;
 	public Action action;
@@ -29,7 +28,7 @@ public class Unit implements BattleUnit {
 	private Team team;
 
 	public Unit(String n, Texture t, int ox, int oy, int width, int height,
-			int x, int y, Team te, int hC, int hB, Action at,
+			int x, int y, Team te, int[] stats, Action at,
 			ArrayList<Action> a) {
 		name = n;
 		sprite = new RegularSprite(t, ox, oy, width, height);
@@ -37,13 +36,16 @@ public class Unit implements BattleUnit {
 		position = new Vector2f(x * 75 + 65, y * 50 + 325);
 		team = te;
 		team.add(this);
-		hpCell = hC;
-		hpBar = hB;
-		hp = hC * hB;
+		hpStat = stats[0];
+		strengthStat = stats[1];
+		dexterityStat = stats[2];
+		intelligenceStat = stats[3];
+		wisdomStat = stats[4];
+		hp = stats[0] * 12;
+		speed = stats[2] * 2;
 		attack = at;
 		actions = a;
 		action = null;
-		speed = 0;
 		movement = 2;
 		move = new Movement();
 		move.setMovement(movement);
@@ -82,18 +84,40 @@ public class Unit implements BattleUnit {
 		return sprite;
 	}
 
-	public void changeCell(int cell) {
-		double percent = (double) hp / (hpCell * hpBar);
-		hpCell = cell;
-		hp = (int) (percent * hpCell * hpBar);
-	}
-
 	public void delete() {
 		BattleRoom.removeList.add(this);
 	}
 
 	public int getDepth() {
 		return depth;
+	}
+	
+	public int getHP() {
+		return hp;
+	}
+	
+	public int getHPMax() {
+		return hpStat * 12;
+	}
+	
+	public int getHPStat() {
+		return hpStat;
+	}
+	
+	public int getStrengthStat() {
+		return strengthStat;
+	}
+	
+	public int getDexterityStat() {
+		return dexterityStat;
+	}
+	
+	public int getIntelligenceStat() {
+		return intelligenceStat;
+	}
+	
+	public int getWisdomStat() {
+		return wisdomStat;
 	}
 
 	public int getSpeed() {

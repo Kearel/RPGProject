@@ -1,14 +1,8 @@
 package rpgProject;
 
-/*
- * health - controls how much health you have
- * speed - how soon your turn is
- * attack - damage stat
- * defense - defense stat
- * 
- */
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import org.jsfml.graphics.Font;
 import org.jsfml.graphics.RenderWindow;
@@ -16,7 +10,10 @@ import org.jsfml.window.VideoMode;
 import org.jsfml.window.event.Event;
 import org.jsfml.graphics.Color;
 
-import rpgProject.example.TestRoom;
+
+
+import rpgProject.actions.ExamplePew;
+//import rpgProject.example.TestRoom;
 import rpgProject.rooms.BattleRoom;
 import rpgProject.rooms.Room;
 
@@ -28,8 +25,12 @@ public class windowMain {
 
 	public static void main(String[] args) {
 		load();
-		room = new BattleRoom(
-				"Example 1,exampleGuy.png,50,87,100,100,2,2,0,10,5,ExamplePew,ExamplePew,ExamplePew\nExample 2,exampleGuy.png,50,85,100,100,3,2,1,3,5,ExamplePew");
+		BattleRoom b = new BattleRoom();
+		int[] stats1 = {3,1,1,1,1};
+		int[] stats2 = {1,1,3,1,1};
+		b.loadUnit("Example 1", "exampleGuy.png", 50, 80, 100, 100, 1, 1, new Team(), stats1, new ExamplePew(), new ArrayList<Action>());
+		b.loadUnit("Example 2", "exampleGuy.png", 50, 80, 100, 100, 3,2, new Team(), stats2, new ExamplePew(), new ArrayList<Action>());
+		room = b;
 		// room = new TestRoom();
 		window.setFramerateLimit(30);
 
