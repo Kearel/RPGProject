@@ -2,9 +2,10 @@ package rpgProject.example;
 
 import org.jsfml.system.Vector2f;
 
-import rpgProject.Projectile;
-import rpgProject.Team;
-import rpgProject.Unit;
+import rpgProject.battle.Projectile;
+import rpgProject.battle.Team;
+import rpgProject.battle.Unit;
+import rpgProject.WindowMain;
 import rpgProject.rooms.BattleRoom;
 
 public class PewProjectile extends Projectile {
@@ -13,7 +14,7 @@ public class PewProjectile extends Projectile {
 	private Team team;
 
 	public PewProjectile(Team t, boolean right, Vector2f pos) {
-		super(pos, BattleRoom.textures.get("pewpew.png"), 7, 40, 15, 15);
+		super(pos, WindowMain.textureManager.loadTexture("pewpew.png"), 7, 40, 15, 15);
 		this.right = right;
 		team = t;
 

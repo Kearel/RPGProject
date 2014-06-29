@@ -1,4 +1,6 @@
-package rpgProject;
+package rpgProject.battle.action;
+
+import rpgProject.battle.Unit;
 
 public abstract class Action {
 	private int frame, maxFrame;

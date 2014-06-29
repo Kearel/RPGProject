@@ -1,4 +1,4 @@
-package rpgProject;
+package rpgProject.graphics;
 
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Drawable;
@@ -7,6 +7,7 @@ import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Text;
 import org.jsfml.system.Vector2f;
 
+import rpgProject.WindowMain;
 import rpgProject.rooms.BattleRoom;
 
 public class DamageText implements Drawable {
@@ -16,7 +17,7 @@ public class DamageText implements Drawable {
 	public DamageText(String t, Color c, int d, Vector2f p){
 		color = c;
 		decay = 255/d;
-		text = new Text(t,windowMain.defont);
+		text = new Text(t,WindowMain.defont);
 		text.setColor(c);
 		text.setPosition(p);
 	}

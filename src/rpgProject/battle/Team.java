@@ -1,4 +1,4 @@
-package rpgProject;
+package rpgProject.battle;
 
 import java.util.ArrayList;
 

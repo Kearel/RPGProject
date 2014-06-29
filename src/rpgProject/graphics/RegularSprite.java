@@ -1,4 +1,4 @@
-package rpgProject;
+package rpgProject.graphics;
 
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Drawable;
@@ -21,12 +21,11 @@ public class RegularSprite implements Drawable {
 
 	public RegularSprite(Texture t) {
 		sprite = new Sprite(t);
-		sprite.setOrigin(50, 90);
-		spriteWidth = 100;
-		spriteHeight = 100;
+		sprite.setOrigin(0, 0);
+		spriteWidth = t.getSize().x;
+		spriteHeight = t.getSize().y;
 		spritesW = t.getSize().x / spriteWidth;
 		setFrame(0);
-		sprite.setScale(new Vector2f(100, 100));
 		flipped = false;
 	}
 
@@ -45,10 +44,14 @@ public class RegularSprite implements Drawable {
 	}
 
 	public void setFrame(int frame) {
-		int w = spriteWidth * (frame % spritesW);
-		int h = spriteHeight * (frame / spritesW);
+		int w = 1 + frame + spriteWidth * (frame % spritesW);
+		int h = 1 + frame/spritesW + spriteHeight * (frame / spritesW);
 		if (h >= sprite.getTexture().getSize().y)
+		{
 			frame = 0;
+			setFrame(0);
+			return;
+		}
 		if (!flipped)
 			sprite.setTextureRect(new IntRect(w, h, spriteWidth, spriteHeight));
 		else
@@ -79,7 +82,10 @@ public class RegularSprite implements Drawable {
 	}
 
 	public void nextFrame() {
-		setFrame(getFrame() + 1);
+		int frame = getFrame() + 1;
+		System.out.println(frame);
+		setFrame(frame);
+		
 	}
 
 	public void setPosition(Vector2f p) {

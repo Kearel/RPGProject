@@ -1,10 +1,12 @@
-package rpgProject;
+package rpgProject.battle;
 
 import org.jsfml.graphics.RenderStates;
 import org.jsfml.graphics.Texture;
 import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
 
+import rpgProject.WindowMain;
+import rpgProject.graphics.RegularSprite;
 import rpgProject.rooms.BattleRoom;
 
 public abstract class Projectile implements BattleUnit {
@@ -28,7 +30,7 @@ public abstract class Projectile implements BattleUnit {
 	public void draw()
 	{
 		sprite.setPosition(position);
-		sprite.draw(windowMain.window, RenderStates.DEFAULT);
+		sprite.draw(WindowMain.window, RenderStates.DEFAULT);
 	}
 
 	public void update() {

@@ -10,24 +10,20 @@ import org.jsfml.graphics.RectangleShape;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Texture;
 
-import rpgProject.BattleUnit;
-import rpgProject.ColoredText;
-import rpgProject.DamageText;
-import rpgProject.DepthComparator;
-import rpgProject.Range;
-import rpgProject.Team;
-import rpgProject.Unit;
-import rpgProject.windowMain;
-import rpgProject.Action;
+import rpgProject.battle.BattleUnit;
+import rpgProject.graphics.ColoredText;
+import rpgProject.graphics.DamageText;
+import rpgProject.battle.DepthComparator;
+import rpgProject.battle.action.Range;
+import rpgProject.battle.Team;
+import rpgProject.battle.Unit;
+import rpgProject.WindowMain;
+import rpgProject.battle.action.Action;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.ArrayList;
 
 public class BattleRoom implements Room {
-	public static HashMap<String, Texture> textures = new HashMap<String, Texture>();
 	public static ArrayList<BattleUnit> battleList = new ArrayList<BattleUnit>();
 	public static ArrayList<BattleUnit> creationList = new ArrayList<BattleUnit>();
 	public static ArrayList<BattleUnit> removeList = new ArrayList<BattleUnit>();
@@ -47,7 +43,7 @@ public class BattleRoom implements Room {
 	private int mouseMode = 0; // 1 selecting unit 2 moving 3 targeting
 
 	public BattleRoom() {
-		windowMain.window.setTitle("Battle Room");
+		WindowMain.window.setTitle("Battle Room");
 		hudBack = new RectangleShape(new Vector2f(500, 100));
 		hudBack.setFillColor(Color.WHITE);
 		hudBack.setOutlineColor(Color.BLACK);
@@ -57,20 +53,21 @@ public class BattleRoom implements Room {
 		redSelect.setFillColor(Color.TRANSPARENT);
 		redSelect.setOutlineColor(Color.RED);
 		redSelect.setOutlineThickness(1);
-		battlefield = new Sprite(loadTexture("battlefield.png"));
-		selectSprite = new Sprite(loadTexture("select.png"));
-		turn = 0;
+		battlefield = new Sprite(
+				WindowMain.textureManager.loadTexture("battlefield.png"));
+		selectSprite = new Sprite(
+				WindowMain.textureManager.loadTexture("select.png"));
+		turn = -1;
 		selectedUnit = null;
 		selectedAction = null;
-		hudText = new ColoredText(windowMain.defont, "DEFAULT");
+		hudText = new ColoredText(WindowMain.defont, "DEFAULT");
 	}
 
-	public void loadUnit(String name, String path, int ox, int oy, int width,
-			int height, int x, int y, Team t, int[] stats, Action attack,
-			ArrayList<Action> actions) {
-		Texture te = loadTexture(path);
-		battleList.add(new Unit(name, te, ox, oy, width, height, x, y, t,
-				stats, attack, actions));
+	public void loadUnit(String name, String path, int x, int y, Team t,
+			int[] stats, Action attack, ArrayList<Action> actions) {
+		Texture te = WindowMain.textureManager.loadTexture(path);
+		battleList.add(new Unit(name, WindowMain.textureManager
+				.createSprite(te), x, y, t, stats, attack, actions));
 
 	}
 
@@ -115,26 +112,6 @@ public class BattleRoom implements Room {
 
 			extraTurns = tempTurns;
 		}
-		for (Unit u : turnOrder) {
-			System.out.println(u.getName());
-		}
-	}
-
-	public Texture loadTexture(String path) {
-		if (!textures.containsKey(path)) {
-			Texture t = new Texture();
-			try {
-				InputStream is = this.getClass().getResourceAsStream(
-						"/rpgProject/resources/" + path);
-				t.loadFromStream(is);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			textures.put(path, t);
-
-			return t;
-		} else
-			return textures.get(path);
 	}
 
 	public static Unit getUnit(int x, int y) {
@@ -205,13 +182,13 @@ public class BattleRoom implements Room {
 		textCreate.clear();
 		textRemove.clear();
 
-		int mX = Mouse.getPosition(windowMain.window).x;
-		int mY = Mouse.getPosition(windowMain.window).y;
+		int mX = Mouse.getPosition(WindowMain.window).x;
+		int mY = Mouse.getPosition(WindowMain.window).y;
 		// @DRAW
-		windowMain.window.draw(battlefield);
+		WindowMain.window.draw(battlefield);
 
 		if (selectedUnit != null) {
-			windowMain.window.draw(hudBack);
+			WindowMain.window.draw(hudBack);
 
 			// @RANGE
 			if (mouseMode == 1) {
@@ -240,18 +217,18 @@ public class BattleRoom implements Room {
 					if (mX > 10 && mY > 70 && mX < 65 && mY < 85) {
 						redSelect.setPosition(10, 70);
 						redSelect.setSize(new Vector2f(55, 15));
-						windowMain.window.draw(redSelect);
+						WindowMain.window.draw(redSelect);
 					}
 					if (mX > 230 && mY > 70 && mX < 265 && mY < 85) {
 						redSelect.setPosition(230, 70);
 						redSelect.setSize(new Vector2f(35, 15));
-						windowMain.window.draw(redSelect);
+						WindowMain.window.draw(redSelect);
 						// skill
 					}
 					if (mX > 450 && mY > 70 && mX < 495 && mY < 85) {
 						redSelect.setPosition(450, 70);
 						redSelect.setSize(new Vector2f(45, 15));
-						windowMain.window.draw(redSelect);
+						WindowMain.window.draw(redSelect);
 						// move
 					}
 
@@ -281,7 +258,7 @@ public class BattleRoom implements Room {
 							redSelect.setPosition(20 + i * 150, 70);
 							redSelect.setSize(new Vector2f(hudText
 									.getTotalWidth(), 15));
-							windowMain.window.draw(redSelect);
+							WindowMain.window.draw(redSelect);
 						}
 					}
 
@@ -292,7 +269,7 @@ public class BattleRoom implements Room {
 						if (mX > 485 && mY > 70 && mX < 495 && mY < 85) {
 							redSelect.setPosition(485, 70);
 							redSelect.setSize(new Vector2f(10, 15));
-							windowMain.window.draw(redSelect);
+							WindowMain.window.draw(redSelect);
 						}
 					}
 				}
@@ -307,15 +284,15 @@ public class BattleRoom implements Room {
 
 		for (DamageText t : textList) {
 			t.update();
-			windowMain.window.draw(t);
+			WindowMain.window.draw(t);
 		}
 	}
 
 	@Override
 	public void input(Event e) {
 		if (e.asMouseEvent() != null) {
-			int mX = Mouse.getPosition(windowMain.window).x;
-			int mY = Mouse.getPosition(windowMain.window).y;
+			int mX = Mouse.getPosition(WindowMain.window).x;
+			int mY = Mouse.getPosition(WindowMain.window).y;
 			if (e.asMouseEvent().type == Event.Type.MOUSE_BUTTON_RELEASED) {
 				if (e.asMouseButtonEvent().button == Mouse.Button.LEFT) {
 					if (mY > 100 && mouseMode == 0 && turn == turnOrder.size()
@@ -442,7 +419,7 @@ public class BattleRoom implements Room {
 	public void drawText(String text, int x, int y) {
 		hudText.setString(text);
 		hudText.setPosition(x, y);
-		windowMain.window.draw(hudText);
+		WindowMain.window.draw(hudText);
 	}
 
 	public void drawRange(Action a, boolean mouse) {
@@ -450,7 +427,7 @@ public class BattleRoom implements Room {
 		Vector2i origin;
 		Vector2i g = selectedUnit.getGrid();
 		if (mouse) {
-			Vector2i m = Mouse.getPosition(windowMain.window);
+			Vector2i m = Mouse.getPosition(WindowMain.window);
 			origin = new Vector2i((int) Math.floor((m.x - 25) / 75),
 					(int) Math.floor((m.y - 300) / 50));
 			for (Vector2i i : r.getSelectionShape()) {
@@ -463,7 +440,7 @@ public class BattleRoom implements Room {
 				if (x >= 0 && x < 6 && y >= 0 && y < 3) {
 					selectSprite.setPosition(x * 75 + 25, y * 50 + 300);
 					selectSprite.setColor(Color.BLUE);
-					windowMain.window.draw(selectSprite);
+					WindowMain.window.draw(selectSprite);
 				}
 			}
 		} else {
@@ -480,7 +457,7 @@ public class BattleRoom implements Room {
 			if (x >= 0 && x < 6 && y >= 0 && y < 3) {
 				selectSprite.setPosition(x * 75 + 25, y * 50 + 300);
 				selectSprite.setColor(Color.RED);
-				windowMain.window.draw(selectSprite);
+				WindowMain.window.draw(selectSprite);
 			}
 		}
 	}

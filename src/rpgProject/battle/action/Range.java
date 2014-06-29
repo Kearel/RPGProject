@@ -1,4 +1,4 @@
-package rpgProject;
+package rpgProject.battle.action;
 
 import org.jsfml.system.Vector2i;
 

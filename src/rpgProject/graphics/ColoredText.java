@@ -1,4 +1,4 @@
-package rpgProject;
+package rpgProject.graphics;
 
 import org.jsfml.graphics.Drawable;
 import org.jsfml.graphics.Font;

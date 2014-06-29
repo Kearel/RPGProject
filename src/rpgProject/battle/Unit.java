@@ -1,17 +1,22 @@
-package rpgProject;
+package rpgProject.battle;
 
 import java.util.ArrayList;
 
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.RenderStates;
-import org.jsfml.graphics.Texture;
 import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
 
-import rpgProject.actions.Movement;
+import rpgProject.graphics.DamageText;
+import rpgProject.WindowMain;
+import rpgProject.graphics.RegularSprite;
+import rpgProject.battle.action.actions.Movement;
+import rpgProject.battle.action.Action;
 import rpgProject.rooms.BattleRoom;
+import rpgProject.battle.statusEffects.StatusEffectManager;
 
 public class Unit implements BattleUnit {
+	private StatusEffectManager statusEffects = new StatusEffectManager(this);
 	private RegularSprite sprite;
 	public Vector2f position;
 	private Vector2i gridPosition;
@@ -27,11 +32,11 @@ public class Unit implements BattleUnit {
 	public Movement move;
 	private Team team;
 
-	public Unit(String n, Texture t, int ox, int oy, int width, int height,
+	public Unit(String n, RegularSprite sprite,
 			int x, int y, Team te, int[] stats, Action at,
 			ArrayList<Action> a) {
 		name = n;
-		sprite = new RegularSprite(t, ox, oy, width, height);
+		this.sprite = sprite;
 		gridPosition = new Vector2i(x, y);
 		position = new Vector2f(x * 75 + 65, y * 50 + 325);
 		team = te;
@@ -56,12 +61,12 @@ public class Unit implements BattleUnit {
 	public void draw() {
 		if (!acting) {
 			position = new Vector2f(gridPosition.x * 75 + 65,
-					gridPosition.y * 50 + 325);
+			gridPosition.y * 50 + 325);
 		}
 		depth = (int) position.y;
 		sprite.setFlipped(gridPosition.x > 2);
 		sprite.setPosition(position);
-		sprite.draw(windowMain.window, RenderStates.DEFAULT);
+		sprite.draw(WindowMain.window, RenderStates.DEFAULT);
 	}
 
 	public void update() {
